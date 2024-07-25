@@ -1,15 +1,18 @@
 <odoo>
     <template id="custom_product" inherit_id="website_sale.product">
         <xpath expr="//div[@id='product_details']//div[@class='oe_structure']" position="before">
-            <table style="visibility: hidden;">
+            <table>
                 <div class="oe_maximum_order_qty" t-if="product.maximum_order_qty">
                     <tr>
                         <td>
                             <b>Maximum Order Quantity:</b>
                         </td>
-                        <td id="qtyMaxId" style="color:red">
+
+                        <br>
+                        <td id="qtyMaxId" style="color:red;padding:5px;">
                             <t t-esc="product.maximum_order_qty" />
                         </td>
+                        </br>
                     </tr>
                 </div>
             </table>
