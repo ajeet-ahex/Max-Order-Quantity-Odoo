@@ -21,76 +21,7 @@
                 <span class="error-text">Warning </span>
             </div>
             <script type="text/javascript">
-<!--                const MIN_DELAY = 100;  // Define constants for better readability-->
-<!--                const ERROR_TOAST_TIMEOUT = 5000;-->
 
-<!--                function setQuantityMin(quantityElement, minQty) {-->
-<!--                  quantityElement.dataset.max = minQty;-->
-<!--                  quantityElement.value = minQty;-->
-<!--                }-->
-
-<!--                function showErrorToast(message) {-->
-<!--                  const errorToaster = document.getElementById('errorToaster');-->
-<!--                  errorToaster.textContent = message;-->
-<!--                  errorToaster.style.visibility = 'visible';-->
-<!--                  setTimeout(() => {-->
-<!--                    errorToaster.style.visibility = 'hidden';-->
-<!--                  }, ERROR_TOAST_TIMEOUT);-->
-<!--                }-->
-
-<!--                setTimeout(() => {-->
-<!--                  try {-->
-<!--                    const quantityElements = document.querySelectorAll('.quantity');-->
-<!--                    const cartButton = document.getElementById("add_to_cart");-->
-<!--                    const minQty = document.getElementById("qtyMaxId").innerHTML;-->
-<!--                    const qtyParse = parseInt(minQty, 10);-->
-
-<!--                    quantityElements.forEach((quantityElement, index) => {-->
-<!--                      setQuantityMin(quantityElement, qtyParse);-->
-
-<!--                      quantityElement.addEventListener('blur', (event) => {-->
-<!--                        const targetValue = parseInt(event.target.value, 10);-->
-<!--                        if (isNaN(targetValue) || targetValue &gt; qtyParse) {-->
-<!--                          showErrorToast(` Warning Maximum Order Quantity  is ${qtyParse}.`);-->
-<!--                          event.target.value = qtyParse;-->
-<!--                        }-->
-<!--                      });-->
-<!--                    });-->
-
-<!--                    // Handle quantity subtract button click-->
-<!--                    const subButton = document.getElementsByClassName("js_add_cart_json")[1];-->
-<!--                    subButton.addEventListener('click', () => {-->
-<!--                      const currentMinQty = parseInt(document.getElementsByClassName("quantity")[0].dataset.max, 10);-->
-<!--                      const currentQty = parseInt(document.getElementsByClassName("quantity")[0].value, 10);-->
-<!--                      if (currentMinQty == currentQty) {-->
-<!--                        showErrorToast(` Warning Maximum Order Quantity  is  ${currentMinQty}.`);-->
-<!--                      }-->
-<!--                    });-->
-
-<!--                    // Handle add to cart button click (similar logic for other buttons)-->
-<!--                    cartButton.addEventListener('click', () => {-->
-<!--                      setTimeout(() => {-->
-<!--                        const quantityElements2 = document.querySelectorAll('.quantity');-->
-<!--                        const minQty2 = document.getElementById("qtyId").innerHTML;-->
-<!--                        const qtyParse2 = parseInt(minQty2, 10);-->
-
-<!--                        quantityElements2.forEach((quantityElement, index) => {-->
-<!--                          setQuantityMin(quantityElement, qtyParse2);-->
-
-<!--                          quantityElement.addEventListener('blur', (event) => {-->
-<!--                            const targetValue = parseInt(event.target.value, 10);-->
-<!--                            if (isNaN(targetValue) || targetValue &gt; qtyParse2) {-->
-<!--                              showErrorToast(` Warning Maximum Order Quantity  is   ${qtyParse2}.`);-->
-<!--                              event.target.value = qtyParse2;-->
-<!--                            }-->
-<!--                          });-->
-<!--                        });-->
-<!--                      }, MIN_DELAY);-->
-<!--                    });-->
-<!--                  } catch (e) {-->
-<!--                    // handle errors gracefully-->
-<!--                  }-->
-<!--                }, MIN_DELAY);-->
 const MIN_DELAY = 100;  // Define constants for better readability
 const ERROR_TOAST_TIMEOUT = 5000;
 
@@ -237,55 +168,7 @@ setTimeout(() => {
             </div>
 
             <script type="text/javascript">
-<!--                setTimeout(()=>{-->
-<!--                try{-->
-<!--                const quantityElements = document.querySelectorAll('.quantity');-->
-<!--                const qtyId1Elements = document.querySelectorAll('.qtyMaxId1');-->
 
-<!--                quantityElements.forEach((quantityElement, index) => {-->
-
-<!--                const value = parseInt(qtyId1Elements[index].innerHTML);-->
-<!--                quantityElement.setAttribute('data-max', `${value}`);-->
-
-<!--                if(parseInt(quantityElement.value) &gt; parseInt(value)){-->
-<!--                    quantityElement.value = `${value}`-->
-<!--                }-->
-
-<!--                quantityElement.addEventListener('input', (event) => {-->
-<!--                    const targetValue = event.target.value;-->
-<!--                    if (targetValue === "" || targetValue === 0 || targetValue === null || targetValue === undefined || parseInt(targetValue) &gt; `${value}`) {-->
-<!--                          const errorToaster = document.getElementById('errorToaster');-->
-<!--                          errorToaster.textContent = ` Warning Maximum Order Quantity  ${value}.`;-->
-<!--                          errorToaster.style.visibility = 'visible';-->
-
-<!--                          setTimeout(() => {-->
-<!--                            errorToaster.style.visibility = 'hidden';-->
-<!--                          }, 5000); // 5 seconds timeout-->
-<!--                          event.target.value = `${value}`-->
-<!--                    }-->
-<!--                  });-->
-<!--                });-->
-
-<!--                try{-->
-<!--                    let subButton = document.getElementsByClassName("js_add_cart_json")[1]-->
-<!--                    subButton.addEventListener('click',()=>{-->
-<!--                        let currentMinQty = document.getElementsByClassName("quantity")[0].getAttribute("data-max")-->
-<!--                        let currentQty = document.getElementsByClassName("quantity")[0].value-->
-<!--                        if(parseInt(currentMinQty) == parseInt(currentQty)){-->
-<!--                            const errorToaster = document.getElementById('errorToaster');-->
-<!--                            errorToaster.textContent = ` Warning Maximum Order Quantity  is ${parseInt(currentMinQty)}.`;-->
-<!--                            errorToaster.style.visibility = 'visible';-->
-
-<!--                            setTimeout(() => {-->
-<!--                            errorToaster.style.visibility = 'hidden';-->
-<!--                            }, 5000); // 5 seconds timeout-->
-<!--                        }-->
-<!--                    })-->
-<!--                }catch(e){}-->
-
-<!--                }catch(e){}-->
-
-<!--                },100)-->
 setTimeout(() => {
   try {
     const quantityElements = document.querySelectorAll('.quantity');
@@ -391,5 +274,6 @@ function showErrorToast(message, quantity = null) {
             </style>
         </xpath>
     </template>
+
 
 </odoo>
