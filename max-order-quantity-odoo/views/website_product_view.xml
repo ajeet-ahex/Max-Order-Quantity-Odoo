@@ -1,279 +1,231 @@
 <odoo>
-    <template id="custom_product" inherit_id="website_sale.product">
+    <template id="custom_max_order_product" inherit_id="website_sale.product">
         <xpath expr="//div[@id='product_details']//div[@class='oe_structure']" position="before">
-            <table>
+            <table style="visibility: hidden;">
                 <div class="oe_maximum_order_qty" t-if="product.maximum_order_qty">
                     <tr>
                         <td>
                             <b>Maximum Order Quantity:</b>
                         </td>
-
-                        <br>
-                        <td id="qtyMaxId" style="color:red;padding:5px;">
-                            <t t-esc="product.maximum_order_qty" />
+                        <td id="qtyMaxId" style="color:red">
+                            <t t-esc="product.maximum_order_qty"/>
                         </td>
-                        </br>
                     </tr>
                 </div>
             </table>
-
-            <div id="errorToaster" class="error-toaster" >
-                <span class="error-text">Warning </span>
+            <div id="errorToasterMax" class="error-toaster-max">
+                <span class="error-text">Warning</span>
             </div>
             <script type="text/javascript">
+                const MAX_DELAY = 1000; // Define constants for better readability
+                const ERROR_TOAST_TIMEOUT = 5000;
 
-const MIN_DELAY = 100;  // Define constants for better readability
-const ERROR_TOAST_TIMEOUT = 5000;
+                function setQuantityMax(quantityElement, maxQty) {
+                quantityElement.dataset.max = maxQty;
+                if(quantityElement.value &gt; maxQty){
+                quantityElement.value = maxQty;
+                }
+                }
 
-function setQuantityMin(quantityElement, minQty) {
-  quantityElement.dataset.max = minQty;
-  quantityElement.value = minQty;
-}
+                function showErrorToast(message) {
+                const errorToasterMax = document.getElementById('errorToasterMax');
+                errorToasterMax.textContent = message;
+                errorToasterMax.style.visibility = 'visible';
+                setTimeout(() => {
+                errorToasterMax.style.visibility = 'hidden';
+                }, ERROR_TOAST_TIMEOUT);
+                }
 
-function showErrorToast(message, quantity = null) {
-  const errorToaster = document.getElementById('errorToaster');
-  errorToaster.innerHTML = ''; // Clear previous content
+                setTimeout(() => {
+                try {
+                const quantityElements = document.querySelectorAll('.quantity');
+                const cartButton = document.getElementById("add_to_cart");
+                const maxQty = document.getElementById("qtyMaxId").innerHTML;
+                const qtyParse = parseInt(maxQty, 10);
+                quantityElements.forEach((quantityElement, index) => {
+                setQuantityMax(quantityElement, qtyParse);
+                quantityElement.addEventListener('blur', (event) => {
+                const targetValue = parseInt(event.target.value, 10);
+                if (isNaN(targetValue) || targetValue > qtyParse) {
+                showErrorToast(`Maximum Order Quantity For The Product is ${qtyParse}.`);
+                event.target.value = qtyParse;
+                }
+                });
+                });
 
-  // Create the message text node
-  const messageTextNode = document.createTextNode(message);
-  errorToaster.appendChild(messageTextNode);
+                // Handle quantity subtract button click
+                const subButton = document.getElementsByClassName("js_add_cart_json")[1];
+                subButton.addEventListener('click', () => {
+                const currentMaxQty = parseInt(document.getElementsByClassName("quantity")[0].dataset.max, 10);
+                const currentQty = parseInt(document.getElementsByClassName("quantity")[0].value, 10);
+                if (currentMaxQty === currentQty) {
+                showErrorToast(`Maximum Order Quantity For The Product is ${currentMaxQty}.`);
+                }
+                });
 
-  // If quantity is provided, create a span element and append it
-  if (quantity !== null) {
-    const quantitySpan = document.createElement('span');
-    quantitySpan.style.color = 'red';
-    quantitySpan.textContent = ` ${quantity}`; // Add a space for readability
-    errorToaster.appendChild(quantitySpan);
+                // Handle add to cart button click (similar logic for other buttons)
+                cartButton.addEventListener('click', () => {
+                setTimeout(() => {
+                const quantityElements2 = document.querySelectorAll('.quantity');
+                const maxQty2 = document.getElementById("qtyMaxId").innerHTML;
+                const qtyParse2 = parseInt(maxQty2, 10);
 
-    // Append the rest of the message if needed
-    const restOfMessage = document.createTextNode('.');
-    errorToaster.appendChild(restOfMessage);
-  }
+                quantityElements2.forEach((quantityElement, index) => {
+                setQuantityMax(quantityElement, qtyParse2);
 
-  errorToaster.style.visibility = 'visible';
-  setTimeout(() => {
-    errorToaster.style.visibility = 'hidden';
-  }, ERROR_TOAST_TIMEOUT);
-}
+                quantityElement.addEventListener('blur', (event) => {
+                const targetValue = parseInt(event.target.value, 10);
+                if (isNaN(targetValue) || targetValue > qtyParse2) {
+                showErrorToast(`Maximum Order Quantity For The Product is ${qtyParse2}.`);
+                event.target.value = qtyParse2;
+                }
+                });
+                });
 
-setTimeout(() => {
-  try {
-    const quantityElements = document.querySelectorAll('.quantity');
-    const cartButton = document.getElementById("add_to_cart");
-    const minQty = document.getElementById("qtyMaxId").innerHTML;
-    const qtyParse = parseInt(minQty, 10);
-
-    quantityElements.forEach((quantityElement) => {
-      setQuantityMin(quantityElement, qtyParse);
-
-      quantityElement.addEventListener('blur', (event) => {
-        const targetValue = parseInt(event.target.value, 10);
-        if (isNaN(targetValue) || targetValue > qtyParse) {
-          showErrorToast('Warning: Maximum Order Quantity is', qtyParse);
-          event.target.value = qtyParse;
-        }
-      });
-    });
-
-    // Handle quantity subtract button click
-    const subButton = document.getElementsByClassName("js_add_cart_json")[1];
-    subButton.addEventListener('click', () => {
-      const currentMinQty = parseInt(document.getElementsByClassName("quantity")[0].dataset.max, 10);
-      const currentQty = parseInt(document.getElementsByClassName("quantity")[0].value, 10);
-      if (currentMinQty === currentQty) {
-        showErrorToast('Warning: Maximum Order Quantity is', currentMinQty);
-      }
-    });
-
-    // Handle add to cart button click (similar logic for other buttons)
-    cartButton.addEventListener('click', () => {
-      setTimeout(() => {
-        const quantityElements2 = document.querySelectorAll('.quantity');
-        const minQty2 = document.getElementById('qtyId').innerHTML;
-        const qtyParse2 = parseInt(minQty2, 10);
-
-        quantityElements2.forEach((quantityElement) => {
-          setQuantityMin(quantityElement, qtyParse2);
-
-          quantityElement.addEventListener('blur', (event) => {
-            const targetValue = parseInt(event.target.value, 10);
-            if (isNaN(targetValue) || targetValue > qtyParse2) {
-              showErrorToast('Warning: Maximum Order Quantity is', qtyParse2);
-              event.target.value = qtyParse2;
-            }
-          });
-        });
-      }, MIN_DELAY);
-    });
-  } catch (e) {
-    // handle errors gracefully
-    console.error(e);
-  }
-}, MIN_DELAY);
-
-
-            </script>
-
-<style>
-    .error-toaster {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 10px 20px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 40%);
-        visibility: hidden;
-        transition: visibility 0s, opacity 0.5s ease;
-        border:2px solid #070808a3;
-        top:47%;
-        width:20%;
-        height:80px;
-        font-size:20px;
-        margin-left:-9.5%;
-        background-color:white;
-        color:black;
-      }
-    .error-toaster::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        right: -16px; /* Adjust as necessary */
-        transform: translateY(-50%);
-        border: 8px solid transparent;
-        border-left-color: black;
-    }
-
-    .error-text {
-        display: inline-block;
-        padding: 0 10px;
-    }
-</style>
-        </xpath>
-    </template>
-
-    <template id="custom_cart_lines" name="Custom Shopping Cart Lines"
-        inherit_id="website_sale.cart_lines">
-        <xpath expr="//div[@class='d-flex flex-column align-items-end']" position="before">
-            <!-- Add your maximum order quantity field here -->
-            <div class="form-group" style="visibility: hidden;">
-                <label for="maximum_order_qty">Maximum Order Quantity</label>
-                <div class="qtyMaxId1">
-                    <t t-esc="line.product_id.maximum_order_qty" />
-                </div>
-            </div>
-
-            <div id="errorToaster" class="error-toaster">
-                 <span class="error-text">Warning </span>
-            </div>
-
-            <script type="text/javascript">
-
-setTimeout(() => {
-  try {
-    const quantityElements = document.querySelectorAll('.quantity');
-    const qtyId1Elements = document.querySelectorAll('.qtyMaxId1');
-
-    quantityElements.forEach((quantityElement, index) => {
-      const value = parseInt(qtyId1Elements[index].innerHTML);
-      quantityElement.setAttribute('data-max', `${value}`);
-
-      if (parseInt(quantityElement.value) > parseInt(value)) {
-        quantityElement.value = `${value}`;
-      }
-
-      quantityElement.addEventListener('input', (event) => {
-        const targetValue = event.target.value;
-        if (targetValue === "" || targetValue === "0" || targetValue === null || targetValue === undefined || parseInt(targetValue) > value) {
-          showErrorToast(`Warning: Maximum Order Quantity is`, value);
-          event.target.value = `${value}`;
-        }
-      });
-    });
-
-    try {
-      let subButton = document.getElementsByClassName("js_add_cart_json")[1];
-      subButton.addEventListener('click', () => {
-        let currentMinQty = document.getElementsByClassName("quantity")[0].getAttribute("data-max");
-        let currentQty = document.getElementsByClassName("quantity")[0].value;
-        if (parseInt(currentMinQty) === parseInt(currentQty)) {
-          showErrorToast(`Warning: Maximum Order Quantity is`, parseInt(currentMinQty));
-        }
-      });
-    } catch (e) {
-      // handle errors gracefully
-      console.error(e);
-    }
-
-  } catch (e) {
-    // handle errors gracefully
-    console.error(e);
-  }
-}, 100);
-
-function showErrorToast(message, quantity = null) {
-  const errorToaster = document.getElementById('errorToaster');
-  errorToaster.innerHTML = ''; // Clear previous content
-
-  // Create the message text node
-  const messageTextNode = document.createTextNode(message);
-  errorToaster.appendChild(messageTextNode);
-
-  // If quantity is provided, create a span element and append it
-  if (quantity !== null) {
-    const quantitySpan = document.createElement('span');
-    quantitySpan.style.color = 'red';
-    quantitySpan.textContent = ` ${quantity}.`; // Add a space for readability
-    errorToaster.appendChild(quantitySpan);
-  }
-
-  errorToaster.style.visibility = 'visible';
-
-  setTimeout(() => {
-    errorToaster.style.visibility = 'hidden';
-  }, 5000); // 5 seconds timeout
-}
-
-
+                // Handle quantity subtract button click
+                const subButton11 = document.querySelectorAll(".js_add_cart_json");
+                subButton11.forEach((cart_button, index) => {
+                cart_button.addEventListener('click', () => {
+                console.log(index)
+                if(index == 3){
+                const currentMaxQty = parseInt(document.getElementsByClassName("quantity")[0].dataset.max, 10);
+                const currentQty = parseInt(document.getElementsByClassName("quantity")[0].value, 10);
+                if (currentMaxQty === currentQty) {
+                showErrorToast(`Maximum Order Quantity For The Product is ${currentMaxQty}.`);
+                }
+                }
+                })
+                })
+                }, MAX_DELAY);
+                });
+                } catch (e) {
+                // handle errors gracefully
+                }
+                }, MAX_DELAY);
             </script>
             <style>
-                .error-toaster {
-                    position: absolute;
-                    bottom: 20px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    padding: 10px 20px;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 5px rgba(0, 0, 0, 40%);
-                    border:2px solid #070808a3;
-                    visibility: hidden;
-                    transition: visibility 0s, opacity 0.5s ease;
-                    top:18%;
-                    width:20%;
-                    font-size:20px;
-                    height:80px;
-                    margin-left:-14%;
-                    background-color:white;
-                    color:black;
-                  }
-                .error-toaster::after {
-                    content: "";
-                    position: absolute;
-                    top: 50%;
-                    right: -16px; /* Adjust as necessary */
-                    transform: translateY(-50%);
-                    border: 8px solid transparent;
-                    border-left-color: black;
+                .error-toaster-max {
+                position: absolute;
+                bottom: 20px;
+                left: 100%;
+                transform: translateX(-50%);
+                padding: 10px 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 40%);
+                visibility: hidden;
+                transition: visibility 0s, opacity 0.5s ease;
+                border:2px solid #070808a3;
+                bottom:94%;
+                width:20%;
+                height:80px;
+                font-size:18px;
+                margin-left:-9.5%;
+                background-color: #ff4d4d;
+                color: #fff;
+                z-index:2000;
                 }
-
                 .error-text {
-                    display: inline-block;
-                    padding: 0 10px;
+                display: inline-block;
+                padding: 0 10px;
                 }
-
             </style>
         </xpath>
     </template>
 
+    <template id="custom_max_order_cart_lines" name="Custom Shopping Cart Lines"
+              inherit_id="website_sale.cart_lines">
+        <xpath expr="//div[@class='d-flex flex-column align-items-end']" position="before">
+            <div class="form-group" style="visibility: hidden;">
+                <label for="maximum_order_qty">Maximum Order Quantity</label>
+                <div class="qtyMaxId1">
+                    <t t-esc="line.product_id.maximum_order_qty"/>
+                </div>
+            </div>
+            <div id="errorToasterMax" class="error-toaster-max"></div>
+            <script type="text/javascript">
+                setTimeout(()=>{
+                try{
+                const quantityElements = document.querySelectorAll('.quantity');
+                const qtyMaxId1Elements = document.querySelectorAll('.qtyMaxId1');
 
+                quantityElements.forEach((quantityElement, index) => {
+
+                const value = parseInt(qtyMaxId1Elements[index].innerHTML);
+                quantityElement.setAttribute('data-max', `${value}`);
+
+                if(parseInt(quantityElement.value) > parseInt(value)){
+                quantityElement.value = `${value}`
+                }
+
+                quantityElement.addEventListener('input', (event) => {
+                const targetValue = event.target.value;
+                if (targetValue === "" || targetValue === 0 || targetValue === null || targetValue === undefined ||
+                parseInt(targetValue) > `${value}`) {
+                const errorToasterMax = document.getElementById('errorToasterMax');
+                errorToasterMax.textContent = `Maximum Order Quantity For The Product is ${value}.`;
+                errorToasterMax.style.visibility = 'visible';
+
+                setTimeout(() => {
+                errorToasterMax.style.visibility = 'hidden';
+                }, 5000); // 5 seconds timeout
+                event.target.value = `${value}`
+                }
+                });
+                });
+
+                try{
+                const subButton111 = document.querySelectorAll(".js_add_cart_json");
+                subButton111.forEach((cart_button, index) => {
+                cart_button.addEventListener('click',()=>{
+                try{
+                const updatedVal = index%2==1?Math.floor(index/2):0;
+                if(index ==1 || index%2 == 1){
+                let currentMaxQty = document.getElementsByClassName("quantity")[updatedVal].getAttribute("data-max")
+                let currentQty = document.getElementsByClassName("quantity")[updatedVal].value
+                if(parseInt(currentMaxQty) == parseInt(currentQty)){
+                const errorToasterMax = document.getElementById('errorToasterMax');
+                errorToasterMax.textContent = `Maximum Order Quantity For The Product is ${parseInt(currentMaxQty)}.`;
+                errorToasterMax.style.visibility = 'visible';
+
+                setTimeout(() => {
+                errorToasterMax.style.visibility = 'hidden';
+                }, 5000); // 5 seconds timeout
+                }
+                }
+                }catch(e){}
+                })
+                })
+                }catch(e){}
+
+                }catch(e){}
+
+                },100)
+            </script>
+            <style>
+                .error-toaster-max {
+                position: absolute;
+                top: 20px; /* Position near the top */
+                right: 20px; /* Align to the right */
+                transform: translateX(0); /* Remove the horizontal centering */
+                padding: 10px 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+                visibility: hidden;
+                transition: visibility 0s, opacity 0.5s ease;
+                border: 2px solid #070808a3;
+                width: 20%;
+                height: 80px;
+                font-size: 18px;
+                background-color: #ff4d4d;
+                color: #fff;
+                z-index: 2000; /* Ensure it stays on top of other elements */
+                }
+
+                .error-text {
+                display: inline-block;
+                padding: 0 10px;
+                }
+            </style>
+        </xpath>
+    </template>
 </odoo>
