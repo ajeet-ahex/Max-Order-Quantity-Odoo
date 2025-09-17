@@ -3,7 +3,7 @@
     'version': '17.0.0.1',
     'category': 'eCommerce',
     'author': 'Ahex Technologies ',
-    'summary': 'E-Commerce Maximum Order Quantity',
+    'summary': 'Our app helps you set maximum order limits to protect stock and prevent bulk buying',
     'website': '',
     'sequence': '10',
     'description': """
