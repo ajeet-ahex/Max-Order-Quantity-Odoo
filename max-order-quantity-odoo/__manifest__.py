@@ -4,8 +4,6 @@
     'category': 'eCommerce',
     'author': 'Ahex Technologies ',
     'summary': 'Our app helps you set maximum order limits to protect stock and prevent bulk buying',
-    'website': '',
-    'sequence': '10',
     'description': """
      Website Customization
     """,
