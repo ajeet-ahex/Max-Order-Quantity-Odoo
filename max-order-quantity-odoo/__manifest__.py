@@ -19,7 +19,7 @@
         'views/website_product_view.xml',
     ],
     'license': 'LGPL-3',
-    'application': True,
+    'application': False,
     'installable': True,
     'website': 'https://www.ahex.co',
 }
