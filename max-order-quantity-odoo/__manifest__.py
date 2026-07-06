@@ -19,6 +19,9 @@ Key Features:
 * **Inventory protection:** Helps protect stock from bulk buyers, controls promotional abuse, and ensures a fairer distribution of high-demand items.
     """,
     'depends': ['base', 'web', 'sale', 'website_sale_stock', 'website_sale', 'website_sale_comparison'],
+    'images': [
+        'static/description/banner.png',
+    ],
     'data': [
         'views/products_view.xml',
         'views/website_product_view.xml',
