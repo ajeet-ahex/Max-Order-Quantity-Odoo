@@ -20,7 +20,7 @@ Key Features:
     """,
     'depends': ['base', 'web', 'sale', 'website_sale_stock', 'website_sale', 'website_sale_comparison'],
     'images': [
-        'static/description/icon.png',
+        'static/description/banner.png',
     ],
     'data': [
         'views/products_view.xml',
