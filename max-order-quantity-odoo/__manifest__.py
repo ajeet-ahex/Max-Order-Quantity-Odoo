@@ -2,10 +2,9 @@
     'name': 'Maximum Order Quantity',
     'version': '17.0.0.1',
     'category': 'eCommerce',
-    'author': 'Ahex Technologies ',
+    'author': 'Ahex Technologies',
     'summary': 'Our app helps you set maximum order limits to protect stock and prevent bulk buying',
-    'website': '',
-    'sequence': '10',
+    'website': 'https://www.ahex.co',
     'description': """
      Website Customization
     """,
@@ -13,7 +12,6 @@
     'images': [
         'static/description/icon.png',
     ],
-
     'data': [
         'views/products_view.xml',
         'views/website_product_view.xml',
@@ -21,5 +19,4 @@
     'license': 'LGPL-3',
     'application': True,
     'installable': True,
-    'website': 'https://www.ahex.co',
 }
